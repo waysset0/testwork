@@ -1,0 +1,43 @@
+services:
+  fastapi:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: fastapi
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=postgresql+asyncpg://testword:123123@db/testwork_database
+    depends_on:
+      - db
+    networks:
+      - app-network
+
+  bot:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: bot
+    depends_on:
+      - fastapi
+    networks:
+      - app-network
+
+  db:
+    image: postgres:13
+    container_name: postgres-db
+    environment:
+      POSTGRES_DB: testwork_database
+      POSTGRES_USER: testword
+      POSTGRES_PASSWORD: 123123
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
