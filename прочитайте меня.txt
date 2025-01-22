@@ -3,4 +3,4 @@
 
 Спасибо, за интересное задание!
 
-запуск - docker-compose up --build
+запуск - docker-compose up
